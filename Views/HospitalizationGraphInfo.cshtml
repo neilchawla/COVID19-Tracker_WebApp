@@ -1,0 +1,88 @@
+@page
+@model HospitalizationGraphModel
+
+@{  
+  var dates = Newtonsoft.Json.JsonConvert.SerializeObject(Model.dates);
+  var _hospitalizations = Newtonsoft.Json.JsonConvert.SerializeObject(Model.hospitalizations);
+  var deaths = Newtonsoft.Json.JsonConvert.SerializeObject(Model.deaths);
+  var state = Model.Input;
+  
+  ViewData["Title"] = "Hospitalizations";
+}
+
+<h2>Hospitalization Data For: @Html.Raw(state)</h2>
+
+<br />
+<br />
+<br />
+<br />
+
+<!--
+<br />
+Date: @Html.Raw(dates);
+<br />
+Hospitalizations: @Html.Raw(_hospitalizations);
+<br />
+Deaths: @Html.Raw(deaths);
+<br />
+<br />
+-->
+
+@{
+  if(@Model.EX != null) {
+    <br />
+    <br />
+    <h3>**ERROR: @Model.EX.Message</h3>
+    <br />
+    <hr />
+    <br />
+    <br />
+  }
+}
+
+<div class="box-body">  
+  <div class="chart-container">  
+     <canvas id="myChart"></canvas>  
+  </div>  
+</div>  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+<script>
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: @Html.Raw(dates),
+        datasets: [
+        {
+            label: "Hospitalizations",  
+            data: @Html.Raw(_hospitalizations),
+            borderColor: "blue",
+            pointBackgroundColor: "black",
+
+            borderWidth: 1
+        },
+        {
+            label: "Deaths",
+            data: @Html.Raw(deaths),
+            borderColor: "red",
+            pointBackgroundColor: "black",
+            
+            borderWidth: 1
+        }
+        ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+</script>
+

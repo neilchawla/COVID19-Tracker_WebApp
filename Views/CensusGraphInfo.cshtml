@@ -1,0 +1,77 @@
+@page
+@model CensusGraphModel
+
+@{  
+  var year = Newtonsoft.Json.JsonConvert.SerializeObject(Model.x_axis);
+  var population = Newtonsoft.Json.JsonConvert.SerializeObject(Model.y_axis);
+  
+  ViewData["Title"] = "Census Graph";
+}
+
+<h2>Population Data Over The Years</h2>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<!--
+<br />
+Raw data: @Html.Raw(year);
+<br />
+Raw data: @Html.Raw(population);
+<br />
+<br />
+-->
+
+@{
+  if(@Model.EX != null) {
+    <br />
+    <br />
+    <h3>**ERROR: @Model.EX.Message</h3>
+    <br />
+    <hr />
+    <br />
+    <br />
+  }
+}
+
+<div class="box-body">  
+  <div class="chart-container">  
+     <canvas id="myChart"></canvas>  
+  </div>  
+</div>  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+<script>
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: @Html.Raw(year),
+        datasets: [
+        {
+            label: "Population",  
+            data: @Html.Raw(population),
+            borderColor: "green",
+            pointBackgroundColor: "black",
+
+            borderWidth: 1
+        }
+        ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+</script>
+

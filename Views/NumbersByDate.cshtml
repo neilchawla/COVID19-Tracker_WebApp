@@ -1,0 +1,87 @@
+@page
+@model NumbersByDateModel
+@{  
+  var Labels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.dates);
+  var Totals = Newtonsoft.Json.JsonConvert.SerializeObject(Model.positive);
+  var Totals1 = Newtonsoft.Json.JsonConvert.SerializeObject(Model.negative);
+  var Totals2 = Newtonsoft.Json.JsonConvert.SerializeObject(Model.deaths);
+
+  ViewData["Title"] = "Infection Totals";
+}  
+
+<h2>Infection Totals</h2>  
+
+<br />
+<br />
+<br />
+<br />
+
+<!--
+<br />
+Raw data: @Html.Raw(Totals)
+<br />
+Raw data: @Html.Raw(Totals1)
+<br />
+Raw data: @Html.Raw(Totals2)
+<br />
+<br />
+-->
+
+@{
+   if (@Model.EX != null)
+	 {
+	   <br />
+		 <br />
+		 <h3>**ERROR: @Model.EX.Message</h3>
+		 <br />
+		 <hr />
+		 <br />
+		 <br />
+	 }
+}
+
+<div class="box-body">  
+  <div class="chart-container">  
+     <canvas id="myChart"></canvas>  
+  </div>  
+</div>  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+<script>
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: @Html.Raw(Labels),
+        datasets: [
+        {
+            label: "Positive Cases",  
+            data: @Html.Raw(Totals),
+            borderColor: "red",
+            pointBackgroundColor: "black",
+
+            borderWidth: 1
+        },
+        {
+            label: "Negative Cases",  
+            data: @Html.Raw(Totals1),
+            borderColor: "blue",
+            pointBackgroundColor: "black",
+
+            borderWidth: 1
+        }
+        ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+</script>

@@ -1,0 +1,135 @@
+@page
+@model ThreeStateGraphModel
+
+@{  
+  var _dates = Newtonsoft.Json.JsonConvert.SerializeObject(Model.d);
+  var s1_p = Newtonsoft.Json.JsonConvert.SerializeObject(Model.s1_pos);
+  var s1_n = Newtonsoft.Json.JsonConvert.SerializeObject(Model.s1_neg);
+  var s2_p = Newtonsoft.Json.JsonConvert.SerializeObject(Model.s2_pos);
+  var s2_n = Newtonsoft.Json.JsonConvert.SerializeObject(Model.s2_neg);
+  var s3_p = Newtonsoft.Json.JsonConvert.SerializeObject(Model.s3_pos);
+  var s3_n = Newtonsoft.Json.JsonConvert.SerializeObject(Model.s3_neg);
+  
+  var state1 = Model.Input;
+  var state2 = Model.Input2;
+  var state3 = Model.Input3;
+  
+  ViewData["Title"] = "State Comparison";
+}
+
+<h2>Comparison Between: @Html.Raw(state1), @Html.Raw(state2), @Html.Raw(state3)</h2>
+
+<br />
+<br />
+<br />
+<br />
+
+<!--
+<br />
+Date: @Html.Raw(_dates);
+<br />
+State 1 Positive Increase: @Html.Raw(s1_p);
+<br />
+State 1 Negative Increase: @Html.Raw(s1_n);
+<br />
+State 2 Positive Increase: @Html.Raw(s2_p);
+<br />
+State 2 Negative Increase: @Html.Raw(s2_n);
+<br />
+State 3 Positive Increase: @Html.Raw(s3_p);
+<br />
+State 3 Negative Increase: @Html.Raw(s3_n);
+<br />
+<br />
+-->
+
+@{
+  if(@Model.EX != null) {
+    <br />
+    <br />
+    <h3>**ERROR: @Model.EX.Message</h3>
+    <br />
+    <hr />
+    <br />
+    <br />
+  }
+}
+
+<div class="box-body">  
+  <div class="chart-container">  
+     <canvas id="myChart"></canvas>  
+  </div>  
+</div>  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+<script>
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: @Html.Raw(_dates),
+        datasets: [
+        {
+            label: "@Html.Raw(state1) Positive Increase",  
+            data: @Html.Raw(s1_p),
+            borderColor: "blue",
+            pointBackgroundColor: "black",
+
+            borderWidth: 1
+        },
+        {
+            label: "@Html.Raw(state1) Negative Increase",
+            data: @Html.Raw(s1_n),
+            borderColor: "red",
+            pointBackgroundColor: "black",
+            
+            borderWidth: 1
+        },
+        {
+            label: "@Html.Raw(state2) Positive Increase",
+            data: @Html.Raw(s2_p),
+            borderColor: "green",
+            pointBackgroundColor: "black",
+            
+            borderWidth: 1
+        },
+        {
+            label: "@Html.Raw(state2) Negative Increase",
+            data: @Html.Raw(s2_n),
+            borderColor: "yellow",
+            pointBackgroundColor: "black",
+            
+            borderWidth: 1
+        },
+        {
+            label: "@Html.Raw(state3) Positive Increase",
+            data: @Html.Raw(s3_p),
+            borderColor: "purple",
+            pointBackgroundColor: "black",
+            
+            borderWidth: 1
+        },
+        {
+            label: "@Html.Raw(state3) Negative Increase",
+            data: @Html.Raw(s3_n),
+            borderColor: "cyan",
+            pointBackgroundColor: "black",
+            
+            borderWidth: 1
+        }
+        ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+</script>
+
